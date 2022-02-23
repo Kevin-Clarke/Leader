@@ -1,0 +1,129 @@
+// set as java application
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'org.json', name: 'json', version: '20200518'
+}
+
+
+def peerName = 'Leader'
+def peer = 'localhost:8000'
+def leaderAddr = 'localhost:8000'
+def clientAddr = 'localhost:9000'
+def isLeader = false
+def isClient = false
+def money = 500
+
+// task reading in the arguments if any given, if not the default from above will be used
+task arguments {
+	if (project.hasProperty("peerName")) {
+      peerName = project.getProperty("peerName")
+    }
+    if (project.hasProperty("peer")) {
+      peer = project.getProperty("peer")
+    }
+    if (project.hasProperty("leaderAddr")) {
+      leaderAddr = project.getProperty("leaderAddr")
+    }
+    if (project.hasProperty("client")) {
+        clientAddr = project.getProperty("clientAddr")
+    }
+    if (project.hasProperty("isLeader")) {
+      isLeader = project.getProperty("isLeader")
+    }
+    if (project.hasProperty("isClient")) {
+        isClient = project.getProperty("isClient")
+    }
+    if (project.hasProperty("money")) {
+        money = project.getProperty("money")
+    }
+} 
+
+task leader(type: JavaExec) {
+  description 'Runs peer'
+
+  classpath = sourceSets.main.runtimeClasspath
+
+  main = 'Peer'
+  standardInput = System.in
+
+  args peerName
+  args peer
+  args leaderAddr
+    args clientAddr
+  args true
+    args isClient
+    args money
+}
+
+task node1(type: JavaExec) {
+    description 'Runs peer'
+
+    classpath = sourceSets.main.runtimeClasspath
+
+    main = 'Peer'
+    standardInput = System.in
+
+    args "node1"
+    args 'localhost:9001'
+    args leaderAddr
+    args clientAddr
+    args isLeader
+    args isClient
+    args money
+}
+
+task node2(type: JavaExec) {
+    description 'Runs peer'
+
+    classpath = sourceSets.main.runtimeClasspath
+
+    main = 'Peer'
+    standardInput = System.in
+
+    args "node2"
+    args 'localhost:9002'
+    args leaderAddr
+    args clientAddr
+    args isLeader
+    args isClient
+    args money
+}
+
+task client(type: JavaExec) {
+    description 'Runs peer'
+
+    classpath = sourceSets.main.runtimeClasspath
+
+    main = 'Peer'
+    standardInput = System.in
+
+    args "client"
+    args 'localhost:9000'
+    args leaderAddr
+    args clientAddr
+    args isLeader
+    args true
+    args 0
+}
+
+task runPeer(type: JavaExec) {
+    description 'Runs peer'
+
+    classpath = sourceSets.main.runtimeClasspath
+
+    main = 'Peer'
+    standardInput = System.in
+
+    args peerName
+    args peer
+    args leaderAddr
+    args clientAddr
+    args isLeader
+    args isClient
+    args money
+}
